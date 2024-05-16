@@ -4,9 +4,11 @@ import com.example.coworkingprojectback.entity.Sala;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface ISalaRepository extends JpaRepository<Sala, Long> {
+public interface SalaRepository extends JpaRepository<Sala, Long> {
+    Optional<Sala> findByEmail(String email);
 
-    private ISalaRepository salaR
-
+    Optional<Sala> findByName(String nombre);
 }
