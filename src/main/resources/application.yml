@@ -1,3 +1,15 @@
 spring:
     application:
         name: coworking-project-back
+    datasource:
+        url: jdbc:mysql://dhdatabase.c9mc42yoi1fs.us-east-2.rds.amazonaws.com:3306/coworking
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: admin1
+        password: Digital2024
+    h2:
+        console:
+            enabled: true
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
