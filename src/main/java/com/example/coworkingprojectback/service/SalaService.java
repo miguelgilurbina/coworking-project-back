@@ -32,7 +32,7 @@ public class SalaService {
         return salaRepository.findAll();
     }
 
-    public Optional<Sala> buscarPorNombre(String nombre) {
-        return salaRepository.findByName(nombre);
+    public Optional<Sala> buscarPorNombre(String nombre){
+        return salaRepository.buscarPorNombre(nombre);
     }
 }

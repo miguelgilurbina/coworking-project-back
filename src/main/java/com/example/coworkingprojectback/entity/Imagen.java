@@ -1,10 +1,6 @@
 package com.example.coworkingprojectback.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,23 +10,24 @@ import java.sql.Blob;
 
 @Setter
 @Getter
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Imagen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false)
-    private Blob imagenURL;
+    @ManyToOne
+    @JoinColumn(name = "sala_id")
+    private Sala sala;
 
-    @Column(nullable = false)
-    private Boolean imagenPrincipal;
+    @Lob
+    @Column(name = "imagen_blob", nullable = false)
+    private Blob imagenBlob;
 
-    // Constructor sin id para cuando la id se genere automáticamente
-    public Imagen(Blob imagenURL, Boolean imagenPrincipal) {
-        this.imagenURL = imagenURL;
-        this.imagenPrincipal = imagenPrincipal;
-    }
+    @Column(name = "imagen_principal", nullable = false, columnDefinition = "tinyint default 0")
+    private boolean imagenPrincipal;
+
 }
+

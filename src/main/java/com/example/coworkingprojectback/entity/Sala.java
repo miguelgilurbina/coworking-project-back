@@ -1,24 +1,24 @@
 package com.example.coworkingprojectback.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.coworkingprojectback.entity.Imagen;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String nombre;
@@ -31,6 +31,9 @@ public class Sala {
 
     @Column(nullable = false)
     private double precio;
+
+    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagen> imagenes = new ArrayList<>();
 
     // Constructor sin id para cuando la id se genere automáticamente
     public Sala(String nombre, String descripcion, int capacidad, double precio) {
