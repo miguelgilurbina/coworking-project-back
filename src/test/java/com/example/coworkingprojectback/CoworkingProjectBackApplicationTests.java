@@ -11,11 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class CoworkingProjectBackApplicationTests {
-
-	@Autowired
-	private SalaService salaService;
-
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 }
