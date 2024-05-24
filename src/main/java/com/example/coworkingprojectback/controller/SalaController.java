@@ -17,7 +17,7 @@ import java.util.Optional;
 public class SalaController {
     @Autowired
     private SalaService salaService;
-
+    {}
     @PostMapping
     @Transactional
     public ResponseEntity<?> registrarSala(@RequestBody Sala sala) {

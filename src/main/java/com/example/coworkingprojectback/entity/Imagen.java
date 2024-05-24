@@ -24,7 +24,7 @@ public class Imagen {
 
     @Lob
     @Column(name = "imagen_blob", nullable = false)
-    private Blob imagenBlob;
+    private byte[] imagenBlob;
 
     @Column(name = "imagen_principal", nullable = false, columnDefinition = "tinyint default 0")
     private boolean imagenPrincipal;
