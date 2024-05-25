@@ -26,11 +26,16 @@ public class Sala {
     @Column(nullable = false)
     private String descripcion;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id") // Nombre de la columna en la tabla Sala que hace referencia a la categoría
+    private Categoria categoria;
+
     @Column(nullable = false)
     private int capacidad;
 
     @Column(nullable = false)
     private double precio;
+
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagen> imagenes = new ArrayList<>();
