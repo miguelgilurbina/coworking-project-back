@@ -21,31 +21,19 @@ public class Sala {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String descripcion;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private Categoria categoria;
+    @Column(nullable = false)
+    private int capacidad;
 
-    @Column(name = "capacidad", nullable = false, columnDefinition = "TINYINT UNSIGNED")
-    private Integer capacidad;
-
-    @Column(name = "precio", nullable = false, columnDefinition = "DECIMAL(4,2)")
+    @Column(nullable = false, precision = 4, scale = 2)
     private BigDecimal precio;
 
-    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImagenSala> imagenes = new ArrayList<>();
-
-    // Constructor sin id para cuando la id se genere automáticamente
-    public Sala(String nombre, String descripcion, int capacidad, double precio, Categoria categoria) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.capacidad = capacidad;
-        this.precio = BigDecimal.valueOf(precio);
-        this.categoria = categoria;
-    }
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 }

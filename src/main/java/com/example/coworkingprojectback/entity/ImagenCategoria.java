@@ -18,13 +18,14 @@ public class ImagenCategoria {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
     @Lob
-    @Column(name = "imagen_blob", nullable = false)
+    @Column(nullable = false)
     private byte[] imagenBlob;
 
-    @Column(name = "imagen_principal", nullable = false, columnDefinition = "TINYINT(1) DEFAULT '0'")
+    @Column(nullable = false)
     private boolean imagenPrincipal;
+
 }

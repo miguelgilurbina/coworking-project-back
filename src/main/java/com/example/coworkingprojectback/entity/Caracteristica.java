@@ -16,9 +16,11 @@ public class Caracteristica {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 255)
     private String caracteristica;
 }
