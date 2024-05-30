@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SalaRepository extends JpaRepository<Sala, Integer> {
-    @Query("SELECT s FROM Sala s WHERE s.nombre = :nombre")
-    Optional<Sala> buscarPorNombre(String nombre);
+public interface SalaRepository extends JpaRepository<Sala, Long> {
+    Optional<Object> findByNombre(String nombre);
 }

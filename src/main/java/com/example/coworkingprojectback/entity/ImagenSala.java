@@ -6,23 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categorias")
-public class Categoria {
+@Entity
+@Table(name = "imagenes_salas")
+public class ImagenSala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 20)
-    private String nombre;
+    @ManyToOne
+    @JoinColumn(name = "sala_id")
+    private Sala sala;
 
-    @Column(length = 255)
-    private String descripcion;
+    @Lob
+    @Column(nullable = false)
+    private byte[] imagenBlob;
+
+    @Column(nullable = false)
+    private boolean imagenPrincipal;
+
 }
