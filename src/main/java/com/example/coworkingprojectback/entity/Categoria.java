@@ -20,15 +20,9 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false, length = 20)
     private String nombre;
-    @Column
+
+    @Column(length = 255)
     private String descripcion;
-
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Sala> salas = new ArrayList<>();
-
-    public Categoria(String nombre) {
-        this.nombre = nombre;
-    }
 }

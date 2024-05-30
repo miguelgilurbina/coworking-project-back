@@ -1,14 +1,13 @@
-package com.example.coworkingprojectback.DTO.Out;
+package com.example.coworkingprojectback.DTO.In;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-public class CaracteristicaResponseDTO {
-    private Long id;
+public class CaracteristicaDTO {
     private Long categoriaId;
     private String caracteristica;
 }

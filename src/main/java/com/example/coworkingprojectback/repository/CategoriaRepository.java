@@ -9,6 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
-    @Query("SELECT s FROM Categoria s WHERE s.nombre = :nombre")
-    Optional<Categoria> buscarPorNombre(String nombre);
 }

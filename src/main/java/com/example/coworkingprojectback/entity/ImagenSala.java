@@ -18,19 +18,14 @@ public class ImagenSala {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sala_id", nullable = false)
+    @JoinColumn(name = "sala_id")
     private Sala sala;
 
     @Lob
-    @Column(name = "imagen_blob", columnDefinition = "MEDIUMBLOB")
+    @Column(nullable = false)
     private byte[] imagenBlob;
 
-    @Column(name = "imagen_principal", nullable = false, columnDefinition = "tinyint default 0")
+    @Column(nullable = false)
     private boolean imagenPrincipal;
-
-
-
-
-
 
 }

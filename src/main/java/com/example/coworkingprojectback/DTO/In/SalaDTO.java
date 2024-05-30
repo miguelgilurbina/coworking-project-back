@@ -1,16 +1,13 @@
-package com.example.coworkingprojectback.DTO.Out;
+package com.example.coworkingprojectback.DTO.In;
 
-import com.example.coworkingprojectback.DTO.In.CategoriaDTO;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 @Setter
 @Getter
 @AllArgsConstructor
-public class SalaResponseDTO {
-    private Long id;
+public class SalaDTO {
     private String nombre;
     private String descripcion;
     private int capacidad;

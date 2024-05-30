@@ -1,4 +1,4 @@
-package com.example.coworkingprojectback.DTO.Out;
+package com.example.coworkingprojectback.DTO.In;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ImagenSalaResponseDTO {
-    private Long id;
+public class ImagenSalaDTO {
     private byte[] imagenBlob;
     private boolean imagenPrincipal;
 }
