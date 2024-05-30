@@ -12,4 +12,4 @@ public interface IImagenSalaService {
     ImagenSalaResponseDTO actualizarImagenSala(ImagenSalaRequestToUpdateDTO imagenSalaDTO);
     List<ImagenSalaResponseDTO> listarImagenSala();
     void borrarImagenSala(Long id);
-}
+};
