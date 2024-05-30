@@ -15,11 +15,11 @@ import lombok.Setter;
 public class Caracteristica {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
+    @JoinColumn(name = "sala_id")
+    private Sala sala;
 
     @Column(nullable = false, length = 255)
     private String caracteristica;

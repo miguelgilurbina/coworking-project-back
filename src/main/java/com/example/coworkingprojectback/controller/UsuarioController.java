@@ -1,6 +1,5 @@
 package com.example.coworkingprojectback.controller;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UserController {
+public class UsuarioController {
     @GetMapping()
     public String getInfoUsuario(Authentication authentication){
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();

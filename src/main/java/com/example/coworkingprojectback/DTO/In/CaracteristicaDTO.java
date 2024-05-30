@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class CaracteristicaDTO {
-    private Long categoriaId;
+    private Long salaId;
     private String caracteristica;
 }

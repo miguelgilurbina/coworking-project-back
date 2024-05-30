@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-public class CaracteristicaResponseDTO {
-    private int id;
-    private Long salaId;
-    private String caracteristica;
+public class ImagenCategoriaResponseDTO {
+    private Long id;
+    private byte[] imagenBlob;
+    private boolean imagenPrincipal;
+
 }
+
