@@ -1,4 +1,4 @@
-package com.example.coworkingprojectback.service;
+package com.example.coworkingprojectback.service.Impl;
 
 import com.example.coworkingprojectback.entity.Sala;
 import com.example.coworkingprojectback.repository.SalaRepository;

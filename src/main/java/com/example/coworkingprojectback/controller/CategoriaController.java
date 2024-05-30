@@ -2,12 +2,10 @@ package com.example.coworkingprojectback.controller;
 
 import com.example.coworkingprojectback.entity.Categoria;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
-import com.example.coworkingprojectback.service.CategoriaService;
-import org.apache.commons.logging.Log;
+import com.example.coworkingprojectback.service.Impl.CategoriaService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 

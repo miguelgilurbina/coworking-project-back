@@ -2,7 +2,7 @@ package com.example.coworkingprojectback.controller;
 
 import com.example.coworkingprojectback.entity.Sala;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
-import com.example.coworkingprojectback.service.SalaService;
+import com.example.coworkingprojectback.service.Impl.SalaService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

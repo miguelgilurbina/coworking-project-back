@@ -1,12 +1,12 @@
 package com.example.coworkingprojectback.entity;
 
-import com.example.coworkingprojectback.entity.Imagen;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,36 +15,37 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "salas")
 public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @Column(nullable = false)
     private String descripcion;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id") // Nombre de la columna en la tabla Sala que hace referencia a la categoría
+    @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-    @Column(nullable = false)
-    private int capacidad;
+    @Column(name = "capacidad", nullable = false, columnDefinition = "TINYINT UNSIGNED")
+    private Integer capacidad;
 
-    @Column(nullable = false)
-    private double precio;
-
+    @Column(name = "precio", nullable = false, columnDefinition = "DECIMAL(4,2)")
+    private BigDecimal precio;
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Imagen> imagenes = new ArrayList<>();
+    private List<ImagenSala> imagenes = new ArrayList<>();
 
     // Constructor sin id para cuando la id se genere automáticamente
-    public Sala(String nombre, String descripcion, int capacidad, double precio) {
+    public Sala(String nombre, String descripcion, int capacidad, double precio, Categoria categoria) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.capacidad = capacidad;
-        this.precio = precio;
+        this.precio = BigDecimal.valueOf(precio);
+        this.categoria = categoria;
     }
 }

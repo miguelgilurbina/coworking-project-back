@@ -1,6 +1,5 @@
 package com.example.coworkingprojectback.entity;
 
-import com.example.coworkingprojectback.entity.Sala;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +14,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Table(name = "categorias")
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
+    @Column
+    private String descripcion;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sala> salas = new ArrayList<>();
@@ -30,5 +31,4 @@ public class Categoria {
     public Categoria(String nombre) {
         this.nombre = nombre;
     }
-
 }
