@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CaracteristicaResponseDTO {
-    private int id;
+    private Long id;
     private Long salaId;
     private String caracteristica;
 }
