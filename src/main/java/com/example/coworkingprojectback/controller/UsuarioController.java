@@ -1,23 +1,45 @@
 package com.example.coworkingprojectback.controller;
 
+import com.example.coworkingprojectback.DTO.In.UsuarioDTO;
+import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
+import com.example.coworkingprojectback.DTO.Update.UsuarioRequestToUpdateDTO;
+import com.example.coworkingprojectback.exception.ResourceNotFoundException;
+import com.example.coworkingprojectback.service.IUsuarioService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    @GetMapping()
-    public String getInfoUsuario(Authentication authentication){
-        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
 
-        String primerRol = roles.iterator().next().getAuthority();
+    private final IUsuarioService usuarioService;
 
-        return "{\"rol\": \"" + primerRol + "\"}";
+    @PostMapping("/registrar")
+    public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO){
+        return new ResponseEntity<>(usuarioService.registrarUsuario(usuarioDTO), HttpStatus.CREATED);
     }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(usuarioService.buscarPorId(id), HttpStatus.OK);
+    }
+    @GetMapping("/listar")
+    public ResponseEntity<Collection<UsuarioResponseDTO>> listarUsuarios() {
+        return new ResponseEntity<>(usuarioService.listarUsuarios(), HttpStatus.OK);
+    }
+    @PutMapping("/actualizar")
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@Valid @RequestBody UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO) throws ResourceNotFoundException {
+        return new ResponseEntity<>(usuarioService.actualizarUsuario(usuarioRequestToUpdateDTO), HttpStatus.OK);
+    }
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) throws ResourceNotFoundException {
+        usuarioService.eliminarUsuario(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

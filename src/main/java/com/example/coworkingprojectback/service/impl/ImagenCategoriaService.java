@@ -2,6 +2,8 @@ package com.example.coworkingprojectback.service.impl;
 
 import com.example.coworkingprojectback.DTO.In.ImagenCategoriaDTO;
 import com.example.coworkingprojectback.DTO.Out.ImagenCategoriaResponseDTO;
+import com.example.coworkingprojectback.DTO.Update.ImagenCategoriaRequestToUpdateDTO;
+import com.example.coworkingprojectback.DTO.Update.ImagenSalaRequestToUpdateDTO;
 import com.example.coworkingprojectback.entity.Categoria;
 import com.example.coworkingprojectback.entity.ImagenCategoria;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
@@ -33,11 +35,7 @@ public class ImagenCategoriaService implements IImagenCategoriaService {
 
     @Override
     public ImagenCategoriaResponseDTO createImagenCategoria(ImagenCategoriaDTO imagenCategoriaDTO) {
-        Categoria categoria = categoriaRepository.findById(imagenCategoriaDTO.getCategoriaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada"));
-
         ImagenCategoria imagenCategoria = mapToEntity(imagenCategoriaDTO);
-        imagenCategoria.setCategoria(categoria);
         imagenCategoriaRepository.save(imagenCategoria);
         return mapToDTO(imagenCategoria);
     }
@@ -53,24 +51,15 @@ public class ImagenCategoriaService implements IImagenCategoriaService {
     public List<ImagenCategoriaResponseDTO> getAllImagenesCategoria() {
         return imagenCategoriaRepository.findAll().stream()
                 .map(this::mapToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
-    @Transactional
-    public ImagenCategoriaResponseDTO updateImagenCategoria(Long id, ImagenCategoriaDTO imagenCategoriaDTO) {
-        ImagenCategoria imagenCategoria = imagenCategoriaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
-
-        Categoria categoria = categoriaRepository.findById(imagenCategoriaDTO.getCategoriaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada"));
-
-        imagenCategoria.setCategoria(categoria);
-        imagenCategoria.setImagenBlob(imagenCategoriaDTO.getImagenBlob());
-        imagenCategoria.setImagenPrincipal(imagenCategoriaDTO.isImagenPrincipal());
-        imagenCategoriaRepository.save(imagenCategoria);
-        return mapToDTO(imagenCategoria);
+    public ImagenCategoriaResponseDTO updateImagenCategoria(ImagenCategoriaRequestToUpdateDTO imagenCategoriaRequestToUpdateDTO) {
+        getImagenCategoriaById(imagenCategoriaRequestToUpdateDTO.getId());
+        return mapToDTO(imagenCategoriaRepository.save(mapToEntity(imagenCategoriaRequestToUpdateDTO)));
     }
+
 
     @Override
     public void deleteImagenCategoria(Long id) {
@@ -80,8 +69,11 @@ public class ImagenCategoriaService implements IImagenCategoriaService {
     private ImagenCategoriaResponseDTO mapToDTO(ImagenCategoria imagenCategoria) {
         return objectMapper.convertValue(imagenCategoria, ImagenCategoriaResponseDTO.class);
     }
-
+    private ImagenCategoria mapToEntity(ImagenCategoriaRequestToUpdateDTO imagenCategoriaRequestToUpdateDTO) {
+        return objectMapper.convertValue(imagenCategoriaRequestToUpdateDTO, ImagenCategoria.class);
+    }
     private ImagenCategoria mapToEntity(ImagenCategoriaDTO imagenCategoriaDTO) {
         return objectMapper.convertValue(imagenCategoriaDTO, ImagenCategoria.class);
     }
+
 }

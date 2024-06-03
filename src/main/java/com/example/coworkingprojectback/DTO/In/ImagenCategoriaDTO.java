@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class ImagenCategoriaDTO {
-    private Long categoriaId;
     private byte[] imagenBlob;
     private boolean imagenPrincipal;
 }
