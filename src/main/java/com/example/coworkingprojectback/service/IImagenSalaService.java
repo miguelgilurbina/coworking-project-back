@@ -9,7 +9,7 @@ import java.util.List;
 public interface IImagenSalaService {
     ImagenSalaResponseDTO registrarImagenSala(ImagenSalaDTO salaDTO);
     ImagenSalaResponseDTO buscarPorId(Long id);
-    ImagenSalaResponseDTO actualizarImagenSala(ImagenSalaRequestToUpdateDTO imagenSalaDTO);
+    ImagenSalaResponseDTO actualizarImagenSala(ImagenSalaRequestToUpdateDTO imagenSalaRequestToUpdateDTO);
     List<ImagenSalaResponseDTO> listarImagenSala();
     void borrarImagenSala(Long id);
 };

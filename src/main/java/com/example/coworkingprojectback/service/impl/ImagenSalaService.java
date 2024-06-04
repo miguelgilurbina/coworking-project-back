@@ -66,6 +66,7 @@ public class ImagenSalaService implements IImagenSalaService {
 
     @Override
     public void borrarImagenSala(Long id) {
-
+        buscarPorId(id);
+        imagenSalaRepository.deleteById(id);
     }
 }

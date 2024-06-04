@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ISalaService {
     SalaResponseDTO registrarSala(SalaDTO salaDTO);
-    SalaResponseDTO actualizarSala(SalaRequestToUpdateDTO salaDTO);
+    SalaResponseDTO actualizarSala(SalaRequestToUpdateDTO salaRequestToUpdateDTO);
     List<SalaResponseDTO> listarSalas();
     SalaResponseDTO buscarPorNombre(String nombre);
     SalaResponseDTO buscarPorId(Long id);

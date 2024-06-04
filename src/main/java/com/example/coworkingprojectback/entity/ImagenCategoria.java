@@ -22,7 +22,7 @@ public class ImagenCategoria {
     private Categoria categoria;
 
     @Lob
-    @Column(nullable = false)
+    @Column(name = "imagen_blob", columnDefinition="MEDIUMBLOB", nullable = false)
     private byte[] imagenBlob;
 
     @Column(nullable = false)

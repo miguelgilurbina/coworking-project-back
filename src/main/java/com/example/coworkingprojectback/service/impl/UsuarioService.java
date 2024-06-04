@@ -1,52 +1,72 @@
 package com.example.coworkingprojectback.service.impl;
 
+import com.example.coworkingprojectback.DTO.In.UsuarioDTO;
+import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
+import com.example.coworkingprojectback.DTO.Update.UsuarioRequestToUpdateDTO;
 import com.example.coworkingprojectback.entity.Usuario;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.repository.UsuarioRepository;
 import com.example.coworkingprojectback.service.IUsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
-@Service
 public class UsuarioService implements IUsuarioService {
 
-    @Autowired
     private UsuarioRepository usuarioRepository;
+    private ObjectMapper objectMapper;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, ObjectMapper objectMapper) {
+        this.usuarioRepository = usuarioRepository;
+        this.objectMapper = objectMapper;
+    }
+    private final String NOT_FOUND_MESSAGE = "No se encontró el usuario solicitado";
+
 
     @Override
-    public Usuario createUser(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioResponseDTO registrarUsuario(UsuarioDTO usuarioDTO) {
+        Usuario usuario = mapToEntity(usuarioDTO);
+        usuarioRepository.save(usuario);
+        return mapToDTO(usuario);
+    }
+
+    private UsuarioResponseDTO mapToDTO(Usuario usuario) {
+        return objectMapper.convertValue(usuario, UsuarioResponseDTO.class);
+    }
+
+    private Usuario mapToEntity(UsuarioDTO usuarioDTO) {
+        return objectMapper.convertValue(usuarioDTO, Usuario.class);
     }
 
     @Override
-    public Usuario getUserById(Long id) {
-        return usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    public UsuarioResponseDTO actualizarUsuario(UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO) {
+        buscarPorId(usuarioRequestToUpdateDTO.getId());
+        return mapToDTO(usuarioRepository.save(mapToEntity(usuarioRequestToUpdateDTO)));
+    }
+    public Usuario mapToEntity(UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO) {
+        return objectMapper.convertValue(usuarioRequestToUpdateDTO, Usuario.class);
     }
 
     @Override
-    public Usuario getUserByEmail(String email) {
-        return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    public List<UsuarioResponseDTO> listarUsuarios() {
+        return usuarioRepository.findAll().stream().map(this::mapToDTO).toList();
     }
 
     @Override
-    public List<Usuario> getAllUsers() {
-        return usuarioRepository.findAll();
+    public UsuarioResponseDTO buscarPorId(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+        return mapToDTO(usuario);
     }
 
     @Override
-    public Usuario updateUser(Long id, Usuario usuario) {
-        Usuario existingUsuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        usuario.setId(existingUsuario.getId()); // Ensure the ID is preserved
-        return usuarioRepository.save(usuario);
+    public UsuarioResponseDTO buscarPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+        return mapToDTO(usuario);
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void eliminarUsuario(Long id) {
+        buscarPorId(id);
         usuarioRepository.deleteById(id);
     }
 }

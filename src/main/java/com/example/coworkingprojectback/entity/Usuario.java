@@ -21,25 +21,25 @@ import java.util.List;
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "nombre", nullable = false, length = 50)
+    private String nombre;
+
+    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
 
-    @Column(nullable = false)
+    @Column(name = "contraseña", nullable = false, length = 255)
     private String contraseña;
 
+    @Column(name = "es_admin", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private UsuarioRole role;
 
-    // Constructor sin id para cuando la id se genere automáticamente
     public Usuario(String nombre, String email, String apellido, String contraseña, UsuarioRole role) {
         this.nombre = nombre;
         this.email = email;

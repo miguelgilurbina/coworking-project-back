@@ -27,7 +27,7 @@ public class Sala {
     @Column(nullable = false, length = 255)
     private String descripcion;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TINYINT UNSIGNED")
     private int capacidad;
 
     @Column(nullable = false, precision = 4, scale = 2)
