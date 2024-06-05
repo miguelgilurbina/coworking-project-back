@@ -23,6 +23,7 @@ public class SalaController {
 
     private final ISalaService salaService;
 
+
     @PostMapping("/registrar")
     @Transactional
     public ResponseEntity<SalaResponseDTO> registrarSala(@Valid @RequestBody SalaDTO salaDTO) {

@@ -9,9 +9,10 @@ import com.example.coworkingprojectback.repository.ImagenSalaRepository;
 import com.example.coworkingprojectback.service.IImagenSalaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class ImagenSalaService implements IImagenSalaService {
     private final ImagenSalaRepository imagenSalaRepository;
     private final ObjectMapper objectMapper;

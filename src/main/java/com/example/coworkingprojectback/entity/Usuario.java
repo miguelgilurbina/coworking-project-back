@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "usuarios")
-public class Usuario implements UserDetails {
+public class Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -34,9 +34,9 @@ public class Usuario implements UserDetails {
     private String apellido;
 
     @Column(name = "contraseña", nullable = false, length = 255)
-    private String contraseña;
+    private String contrasena;
 
-    @ManyToOne
-    @JoinColumn(name = "roles_id")
-    private Roles rol;
+    @Column(name = "es_admin", nullable = false)
+    private boolean esAdmin;
+
 }

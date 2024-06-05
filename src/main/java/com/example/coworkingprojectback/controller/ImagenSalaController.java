@@ -6,18 +6,16 @@ import com.example.coworkingprojectback.DTO.Update.ImagenSalaRequestToUpdateDTO;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.service.IImagenSalaService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/imagenes_salas")
 public class ImagenSalaController {
 
     private final IImagenSalaService imagenSalaService;
-    public ImagenSalaController(IImagenSalaService imagenSalaService) {
-        this.imagenSalaService = imagenSalaService;
-    }
 
     @PostMapping("/registrar")
     public ResponseEntity<ImagenSalaResponseDTO> registrarImagenSala(@RequestBody ImagenSalaDTO imagenSalaDTO) {
