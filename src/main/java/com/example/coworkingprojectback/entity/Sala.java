@@ -1,12 +1,12 @@
 package com.example.coworkingprojectback.entity;
 
-import com.example.coworkingprojectback.entity.Imagen;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,31 +15,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "salas")
 public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String descripcion;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TINYINT UNSIGNED")
     private int capacidad;
 
-    @Column(nullable = false)
-    private double precio;
+    @Column(nullable = false, precision = 4, scale = 2)
+    private BigDecimal precio;
 
-    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Imagen> imagenes = new ArrayList<>();
-
-    // Constructor sin id para cuando la id se genere automáticamente
-    public Sala(String nombre, String descripcion, int capacidad, double precio) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.capacidad = capacidad;
-        this.precio = precio;
-    }
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 }

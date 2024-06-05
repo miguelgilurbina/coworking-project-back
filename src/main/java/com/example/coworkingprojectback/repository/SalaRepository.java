@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface SalaRepository extends JpaRepository<Sala, Long> {
-    @Query("SELECT s FROM Sala s WHERE s.nombre = :nombre")
-    Optional<Sala> buscarPorNombre(String nombre);
+    Optional<Object> findByNombre(String nombre);
 }

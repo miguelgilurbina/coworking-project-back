@@ -11,5 +11,17 @@ spring:
             enabled: true
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: validate
         show-sql: true
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: soundrentals24@gmail.com
+        password: your-email-password
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+
