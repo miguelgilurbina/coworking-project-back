@@ -6,20 +6,27 @@ import com.example.coworkingprojectback.DTO.Update.UsuarioRequestToUpdateDTO;
 import com.example.coworkingprojectback.entity.Usuario;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.repository.UsuarioRepository;
+import com.example.coworkingprojectback.service.EmailService;
 import com.example.coworkingprojectback.service.IUsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
-
+@Service
+@AllArgsConstructor
+@Getter
+@Setter
 public class UsuarioService implements IUsuarioService {
 
     private UsuarioRepository usuarioRepository;
     private ObjectMapper objectMapper;
+    private EmailService emailService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ObjectMapper objectMapper) {
-        this.usuarioRepository = usuarioRepository;
-        this.objectMapper = objectMapper;
-    }
     private final String NOT_FOUND_MESSAGE = "No se encontró el usuario solicitado";
 
 
@@ -68,5 +75,15 @@ public class UsuarioService implements IUsuarioService {
     public void eliminarUsuario(Long id) {
         buscarPorId(id);
         usuarioRepository.deleteById(id);
+    }
+    public void enviarEmailConfirmacion(UsuarioResponseDTO usuarioResponseDTO) throws MessagingException, IOException, jakarta.mail.MessagingException {
+        String recipient = usuarioResponseDTO.getEmail();
+        String subject = "Bienvenido " + usuarioResponseDTO.getNombre()+"!";
+        String template = "Hola, "+ usuarioResponseDTO.getNombre()+" "+ usuarioResponseDTO.getApellido()+"!"
+                +"\n\n"
+                + "Bienvenido a Coworking!!";
+        emailService.sendHtmlEmail(recipient, subject, template);
+
+
     }
 }

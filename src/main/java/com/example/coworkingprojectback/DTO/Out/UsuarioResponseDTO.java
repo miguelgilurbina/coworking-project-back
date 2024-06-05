@@ -14,6 +14,18 @@ public class UsuarioResponseDTO {
     private String nombre;
     private String apellido;
     private boolean esAdmin;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
 }
 
 

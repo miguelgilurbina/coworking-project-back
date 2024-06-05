@@ -16,4 +16,7 @@ public class UsuarioRequestToUpdateDTO {
     private String apellido;
     private boolean esAdmin;
 
+    public Long getId() {
+        return id;
+    }
 }
