@@ -36,50 +36,7 @@ public class Usuario implements UserDetails {
     @Column(name = "contraseña", nullable = false, length = 255)
     private String contraseña;
 
-    @Column(name = "es_admin", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UsuarioRole role;
-
-    public Usuario(String nombre, String email, String apellido, String contraseña, UsuarioRole role) {
-        this.nombre = nombre;
-        this.email = email;
-        this.apellido = apellido;
-        this.contraseña = contraseña;
-        this.role = role;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return contraseña;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @ManyToOne
+    @JoinColumn(name = "roles_id")
+    private Roles rol;
 }
