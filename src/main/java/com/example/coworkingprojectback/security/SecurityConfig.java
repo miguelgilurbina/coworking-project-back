@@ -13,8 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-
-
 public class SecurityConfig {
 
     @Bean
@@ -23,14 +21,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Public endpoints
                         .requestMatchers("/salas/listar", "/salas/{id}", "/salas/nombre/{nombre}").permitAll()
-                        .requestMatchers("/usuarios/listar", "/usuarios/{id}").permitAll()
-                        .requestMatchers("/caracteristicas/listar", "/caracteristicas/{id}").permitAll()
-                        .requestMatchers("/categorias/listar", "/categorias/{id}").permitAll()
                         // Private endpoints
                         .requestMatchers("/salas/registrar", "/salas/actualizar", "/salas/eliminar/**").authenticated()
-                        .requestMatchers("/usuarios/registrar", "/usuarios/actualizar", "/usuarios/eliminar/**").authenticated()
-                        .requestMatchers("/caracteristicas/registrar", "/caracteristicas/actualizar", "/caracteristicas/eliminar/**").authenticated()
-                        .requestMatchers("/categorias/registrar", "/categorias/actualizar", "/categorias/eliminar/**").authenticated()
+                        .requestMatchers( "/usuarios/{id}","/usuarios/listar","/usuarios/registrar", "/usuarios/actualizar", "/usuarios/eliminar/**").authenticated()
+                        .requestMatchers("/caracteristicas/listar", "/caracteristicas/{id}","/caracteristicas/registrar", "/caracteristicas/actualizar", "/caracteristicas/eliminar/**").authenticated()
+                        .requestMatchers("/categorias/listar", "/categorias/{id}","/categorias/registrar", "/categorias/actualizar", "/categorias/eliminar/**").authenticated()
                         //.anyRequest().permitAll() // Optional: adjust according to your needs
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
