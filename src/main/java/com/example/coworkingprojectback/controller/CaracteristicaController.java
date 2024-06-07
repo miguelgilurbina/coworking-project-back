@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @AllArgsConstructor
 @RestController
-@RequestMapping("caracteristicas")
+@RequestMapping("/caracteristicas")
 public class CaracteristicaController {
 
     @Autowired
     private ICaracteristicaService caracteristicaService;
 
-    @PostMapping("registrar")
+    @PostMapping("/registrar")
     public ResponseEntity<CaracteristicaResponseDTO> createCaracteristica( @RequestBody CaracteristicaDTO caracteristicaDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(caracteristicaService.createCaracteristica(caracteristicaDTO));
     }

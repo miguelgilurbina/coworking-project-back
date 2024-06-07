@@ -4,6 +4,8 @@ import com.example.coworkingprojectback.DTO.In.ImagenSalaDTO;
 import com.example.coworkingprojectback.DTO.Out.ImagenSalaResponseDTO;
 import com.example.coworkingprojectback.DTO.Update.ImagenSalaRequestToUpdateDTO;
 
+
+
 import java.util.List;
 
 public interface IImagenSalaService {
