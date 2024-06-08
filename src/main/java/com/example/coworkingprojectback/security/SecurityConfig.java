@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Public endpoints
                         .requestMatchers("/salas/listar", "/salas/{id}", "/salas/nombre/{nombre}").permitAll()
+                        .requestMatchers( "usuarios/registrar").permitAll()
                         // Private endpoints
                         .requestMatchers("/salas/registrar", "/salas/actualizar", "/salas/eliminar/**").authenticated()
                         .requestMatchers( "/usuarios/{id}","/usuarios/listar","/usuarios/registrar", "/usuarios/actualizar", "/usuarios/eliminar/**").authenticated()
