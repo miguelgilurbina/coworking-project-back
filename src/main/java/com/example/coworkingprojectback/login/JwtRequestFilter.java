@@ -1,5 +1,4 @@
 package com.example.coworkingprojectback.login;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +46,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }
