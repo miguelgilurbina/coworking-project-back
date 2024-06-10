@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+
 @Service
 public class ImagenSalaService implements IImagenSalaService {
     private final ImagenSalaRepository imagenSalaRepository;

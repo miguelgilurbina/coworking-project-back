@@ -29,6 +29,10 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(usuarioService.buscarPorId(id), HttpStatus.OK);
     }
+    @GetMapping("/{email}")
+    public ResponseEntity<UsuarioResponseDTO> buscarPorEmail(@PathVariable String email) throws ResourceNotFoundException {
+        return new ResponseEntity<>(usuarioService.buscarPorEmail(email), HttpStatus.OK);
+    }
     @GetMapping("/listar")
     public ResponseEntity<Collection<UsuarioResponseDTO>> listarUsuarios() {
         return new ResponseEntity<>(usuarioService.listarUsuarios(), HttpStatus.OK);

@@ -1,21 +1,19 @@
 package com.example.coworkingprojectback.DTO.Update;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class UsuarioRequestToUpdateDTO {
+
+public class ReservaRequestToUpdateDTO{
     private Long id;
-    private String email;
-    private String nombre;
-    private String apellido;
-    private String contrasena;
-    private boolean esAdmin;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     public Long getId() {
         return id;

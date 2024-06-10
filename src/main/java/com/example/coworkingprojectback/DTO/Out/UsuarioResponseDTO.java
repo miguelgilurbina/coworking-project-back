@@ -13,6 +13,7 @@ public class UsuarioResponseDTO {
     private String email;
     private String nombre;
     private String apellido;
+    private String contrasena;
     private boolean esAdmin;
 
     public String getEmail() {
