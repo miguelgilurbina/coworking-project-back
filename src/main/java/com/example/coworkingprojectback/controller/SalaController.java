@@ -12,12 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/salas")
 public class SalaController {
 
     private final ISalaService salaService;
+
+    public SalaController(ISalaService salaService) {
+        this.salaService = salaService;
+    }
 
     // Public endpoints
     @GetMapping("/{id}")
@@ -37,7 +40,6 @@ public class SalaController {
 
     // Private endpoints
     @PostMapping("/registrar")
-    @Transactional
     public ResponseEntity<SalaResponseDTO> registrarSala(@Valid @RequestBody SalaDTO salaDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(salaService.registrarSala(salaDTO));
     }

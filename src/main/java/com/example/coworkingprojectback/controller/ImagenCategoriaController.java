@@ -12,12 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@AllArgsConstructor
 @RestController
 @RequestMapping("/imagenes-categorias")
 public class ImagenCategoriaController {
 
     private final IImagenCategoriaService imagenCategoriaService;
+
+    public ImagenCategoriaController(IImagenCategoriaService imagenCategoriaService) {
+        this.imagenCategoriaService = imagenCategoriaService;
+    }
 
 
     @PostMapping("/registrar")

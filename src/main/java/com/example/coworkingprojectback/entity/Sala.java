@@ -35,4 +35,5 @@ public class Sala {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
 }
