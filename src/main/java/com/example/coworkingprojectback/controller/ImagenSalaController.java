@@ -10,12 +10,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/imagenes_salas")
 public class ImagenSalaController {
 
+
     private final IImagenSalaService imagenSalaService;
+
 
     @PostMapping("/registrar")
     public ResponseEntity<ImagenSalaResponseDTO> registrarImagenSala(@RequestBody ImagenSalaDTO imagenSalaDTO) {
