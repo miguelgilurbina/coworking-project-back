@@ -18,10 +18,9 @@ import java.util.List;
 @Table(name = "salas")
 public class Sala {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true, nullable = false, length = 50)
+    private Long id;
+    @Column
     private String nombre;
 
     @Column(nullable = false, length = 255)
