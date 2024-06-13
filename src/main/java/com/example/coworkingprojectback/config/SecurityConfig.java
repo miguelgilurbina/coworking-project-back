@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/public/**").permitAll()
+                                .requestMatchers("/salas/listar","categorias/listar").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(firebaseAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -13,5 +13,5 @@ public class UsuarioDTO {
     private String email;
     private String nombre;
     private String apellido;
-    private boolean esAdmin;
+    private String rol;
 }

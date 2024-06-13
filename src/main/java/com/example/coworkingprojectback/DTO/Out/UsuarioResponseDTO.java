@@ -13,7 +13,9 @@ public class UsuarioResponseDTO {
     private String email;
     private String nombre;
     private String apellido;
-    private boolean esAdmin;
+    private String rol;
+
+    public Long getId() { return id; }
 
     public String getEmail() {
         return email;
@@ -26,6 +28,8 @@ public class UsuarioResponseDTO {
     public String getApellido() {
         return apellido;
     }
+
+    public String getRol() { return rol; }
 }
 
 

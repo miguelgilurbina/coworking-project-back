@@ -1,5 +1,4 @@
 package com.example.coworkingprojectback.controller;
-
 import com.example.coworkingprojectback.DTO.In.CaracteristicaDTO;
 import com.example.coworkingprojectback.DTO.Out.CaracteristicaResponseDTO;
 import com.example.coworkingprojectback.DTO.Update.CaracteristicaRequestToUpdate;
@@ -10,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +22,7 @@ public class CaracteristicaController {
     @Autowired
     private ICaracteristicaService caracteristicaService;
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/registrar")
     public ResponseEntity<CaracteristicaResponseDTO> createCaracteristica( @RequestBody CaracteristicaDTO caracteristicaDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(caracteristicaService.createCaracteristica(caracteristicaDTO));

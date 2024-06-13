@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -36,18 +38,19 @@ public class SalaController {
     }
 
     // Private endpoints
+    @Secured("ROLE_ADMIN")
     @PostMapping("/registrar")
     @Transactional
     public ResponseEntity<SalaResponseDTO> registrarSala(@Valid @RequestBody SalaDTO salaDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(salaService.registrarSala(salaDTO));
     }
-
+    @Secured("ROLE_ADMIN")
     @Transactional
     @PutMapping("/actualizar")
     public ResponseEntity<SalaResponseDTO> actualizarSala(@Valid @RequestBody SalaRequestToUpdateDTO salaDTO) throws ResourceNotFoundException{
         return ResponseEntity.ok(salaService.actualizarSala(salaDTO));
     }
-
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarSala(@PathVariable Long id) throws ResourceNotFoundException {
         salaService.eliminarSala(id);

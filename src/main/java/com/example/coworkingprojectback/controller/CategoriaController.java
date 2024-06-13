@@ -8,6 +8,7 @@ import com.example.coworkingprojectback.service.ICategoriaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class CategoriaController {
 
 
     private ICategoriaService categoriaService;
-
+    @Secured("ROLE_ADMIN")
     @PostMapping("/registrar")
     public ResponseEntity<CategoriaResponseDTO> createCategoria(@RequestBody CategoriaDTO categoriaDTO) {
         CategoriaResponseDTO createdCategoria = categoriaService.createCategoria(categoriaDTO);
@@ -35,11 +36,13 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.getAllCategorias());
     }
 
-    @PutMapping("actualizar")
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/actualizar")
     public ResponseEntity<CategoriaResponseDTO> updateCategoria(@RequestBody CategoriaRequestToUpdateDTO categoriaDTO) throws ResourceNotFoundException {
         return ResponseEntity.ok(categoriaService.updateCategoria(categoriaDTO));
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         categoriaService.deleteCategoria(id);
