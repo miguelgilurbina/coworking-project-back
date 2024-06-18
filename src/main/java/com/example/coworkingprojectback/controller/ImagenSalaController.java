@@ -12,13 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/imagenes_salas")
 public class ImagenSalaController {
 
 
     private final IImagenSalaService imagenSalaService;
+
+    public ImagenSalaController(IImagenSalaService imagenSalaService) {
+        this.imagenSalaService = imagenSalaService;
+    }
 
 
     @PostMapping("/registrar")
