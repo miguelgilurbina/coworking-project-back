@@ -1,27 +1,13 @@
 package com.example.coworkingprojectback.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
+import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "usuarios")
-public class Usuario implements UserDetails{
+public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
@@ -34,58 +20,58 @@ public class Usuario implements UserDetails{
     private String apellido;
 
     @Column(name = "contraseña", nullable = false, length = 255)
-    private String contrasena;
+    private String contraseña;
 
-    @Column(name = "es_admin", nullable = false)
-    private boolean esAdmin;
+    @Column(name = "rol", nullable = false, length = 255)
+    private String rol;
 
-    @Transient
-    private UsuarioRole usuarioRole;
+    // Getters and Setters (generated automatically or defined explicitly)
 
-    public Usuario(String email, String nombre, String apellido, String contrasena, boolean esAdmin) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
         this.apellido = apellido;
-        this.contrasena = contrasena;
-        this.esAdmin = esAdmin;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    public String getContraseña() {
+        return contraseña;
     }
 
-    @Override
-    public String getPassword() {
-        return "";
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
-    @Override
-    public String getUsername() {
-        return "";
+    public String getRol() {
+        return rol;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    public void setUsuarioRole(UsuarioRole usuarioRole) {
-        this.usuarioRole = usuarioRole;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

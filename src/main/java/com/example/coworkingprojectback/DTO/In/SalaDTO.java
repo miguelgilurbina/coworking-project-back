@@ -12,6 +12,5 @@ public class SalaDTO {
     private String descripcion;
     private int capacidad;
     private BigDecimal precio;
-    private CategoriaDTO categoria;
-
+    private Long categoriaId;
 }
