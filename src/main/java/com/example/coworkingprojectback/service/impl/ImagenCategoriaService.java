@@ -13,7 +13,6 @@ import com.example.coworkingprojectback.service.IImagenCategoriaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 

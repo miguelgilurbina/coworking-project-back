@@ -5,10 +5,10 @@ import com.example.coworkingprojectback.DTO.Out.ImagenSalaResponseDTO;
 import com.example.coworkingprojectback.DTO.Update.ImagenSalaRequestToUpdateDTO;
 import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.service.IImagenSalaService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 

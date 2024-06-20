@@ -1,22 +1,27 @@
 package com.example.coworkingprojectback.entity;
+import java.io.Serializable;
+import javax.persistence.Embeddable;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+@Embeddable
+public class UsuarioSala implements Serializable {
+    private Long idUsuario;
+    private Long idSala;
 
-@Entity
-@Getter@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "usuarios_salas")
-public class UsuarioSala {
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
-    @ManyToOne
-    @JoinColumn(name = "sala_id", nullable = false)
-    private Sala sala;
+    // Constructor, getters y setters
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioSala that = (UsuarioSala) o;
+        if (!idUsuario.equals(that.idUsuario)) return false;
+        return idSala.equals(that.idSala);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idUsuario.hashCode();
+        result = 31 * result + idSala.hashCode();
+        return result;
+    }
 }

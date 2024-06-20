@@ -8,8 +8,9 @@ import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.repository.ImagenSalaRepository;
 import com.example.coworkingprojectback.service.IImagenSalaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 
