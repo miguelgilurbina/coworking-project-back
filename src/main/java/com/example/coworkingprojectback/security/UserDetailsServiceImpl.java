@@ -1,4 +1,4 @@
-package com.example.coworkingprojectback.service.impl;
+package com.example.coworkingprojectback.security;
 
 import com.example.coworkingprojectback.entity.Usuario;
 import com.example.coworkingprojectback.repository.UsuarioRepository;
@@ -9,19 +9,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
 @Service
-public class UsuarioService implements UserDetailsService {
-
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuarioBuscado = usuarioRepository.findByEmail(username);
-        if(usuarioBuscado.isPresent())
-            return (UserDetails) usuarioBuscado.get();
-        throw new UsernameNotFoundException("No se encontró el usuario");
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository
+                .findOneByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("El usuario con email "+email+ " no existe"));
+        return new UserDetailsImpl(usuario);
     }
-
 }
