@@ -22,14 +22,11 @@ public class SecurityConfig {
                         // Public endpoints
                         .requestMatchers("/salas/listar", "/salas/{id}", "/salas/nombre/{nombre}").permitAll()
                         .requestMatchers( "usuarios/registrar").permitAll()
-                        // Private endpoints
-                        .requestMatchers("/salas/registrar", "/salas/actualizar", "/salas/eliminar/**").authenticated()
-                        .requestMatchers( "/usuarios/{id}","/usuarios/listar","/usuarios/registrar", "/usuarios/actualizar", "/usuarios/eliminar/**").authenticated()
-                        .requestMatchers("/caracteristicas/listar", "/caracteristicas/{id}","/caracteristicas/registrar", "/caracteristicas/actualizar", "/caracteristicas/eliminar/**").authenticated()
-                        .requestMatchers("/categorias/listar", "/categorias/{id}","/categorias/registrar", "/categorias/actualizar", "/categorias/eliminar/**").authenticated()
+                        .requestMatchers("/salas/registrar", "/salas/actualizar", "/salas/eliminar/**").permitAll()
+                        .requestMatchers( "/usuarios/{id}","/usuarios/listar","/usuarios/registrar", "/usuarios/actualizar", "/usuarios/eliminar/**").permitAll()
+                        .requestMatchers("/caracteristicas/listar", "/caracteristicas/{id}","/caracteristicas/registrar", "/caracteristicas/actualizar", "/caracteristicas/eliminar/**").permitAll()
+                        .requestMatchers("/categorias/listar", "/categorias/{id}","/categorias/registrar", "/categorias/actualizar", "/categorias/eliminar/**").permitAll()
                         //.anyRequest().permitAll() // Optional: adjust according to your needs
-
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
