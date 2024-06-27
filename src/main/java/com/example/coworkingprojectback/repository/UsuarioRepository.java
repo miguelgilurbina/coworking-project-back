@@ -10,6 +10,5 @@ import java.util.Optional;
 @Transactional
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
     Optional<Usuario> findByEmail(String email);
-    Optional<Usuario> findOneByEmail(String email);
-
+    Optional<Usuario> findByNombre(String nombre);
 }
