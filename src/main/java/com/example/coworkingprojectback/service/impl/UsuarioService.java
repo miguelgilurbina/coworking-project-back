@@ -7,6 +7,8 @@ import com.example.coworkingprojectback.entity.Usuario;
 import com.example.coworkingprojectback.repository.UsuarioRepository;
 import com.example.coworkingprojectback.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,17 +16,30 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioService implements IUsuarioService {
 
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
+    @Autowired
+    public UsuarioService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.usuarioRepository = usuarioRepository;
+    }
     @Override
     public UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO usuarioDTO) {
         Usuario usuario = new Usuario();
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setApellido(usuarioDTO.getApellido());
-        usuario.setPassword(usuarioDTO.getPassword()); // Considera encriptar la contraseña
+        usuario.setPassword(usuarioDTO.getPassword());
         usuario.setRol(usuarioDTO.getRol());
+
+        String encodedPassword = passwordEncoder.encode(usuarioDTO.getPassword());
+        usuario.setPassword(encodedPassword);
+
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            throw new DataIntegrityViolationException("El correo electrónico ya está registrado.");
+        }
 
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
         return convertirADTO(usuarioGuardado);
@@ -74,4 +89,6 @@ public class UsuarioService implements IUsuarioService {
         dto.setRol(usuario.getRol());
         return dto;
     }
+
+
 }

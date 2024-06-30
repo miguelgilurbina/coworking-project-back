@@ -1,7 +1,9 @@
 package com.example.coworkingprojectback.controller;
-import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
+import com.example.coworkingprojectback.DTO.In.UsuarioRequestDTO;
 import com.example.coworkingprojectback.service.impl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -21,17 +23,18 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/registrar")
-    public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@RequestBody ) {
+    public ResponseEntity<?> registrarUsuario(@RequestBody UsuarioRequestDTO usuario) {
         try {
             // Encripta la contraseña antes de pasarla al servicio
-            usuarioResponseDTO.setPassword(passwordEncoder.encode(usuarioResponseDTO.getPassword()));
+            usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.ok(usuario);
 
-            UsuarioResponseDTO nuevoUsuario = usuarioService.registrarUsuario(usuarioResponseDTO);
-            return ResponseEntity.ok(nuevoUsuario);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo electrónico ya está registrado.");
         } catch (Exception e) {
-            // Considera crear un DTO específico para errores
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error durante el registro.");
         }
+
     }
 
     @GetMapping("/info")
@@ -42,7 +45,7 @@ public class UsuarioController {
         userInfo.put("roles", getRoles(authentication));
         return userInfo;
     }
-
+    @GetMapping("/roles")
     private String getRoles(Authentication authentication) {
         StringBuilder roles = new StringBuilder();
         boolean first = true;
