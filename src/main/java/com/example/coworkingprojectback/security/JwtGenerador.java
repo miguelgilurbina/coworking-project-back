@@ -3,25 +3,34 @@ package com.example.coworkingprojectback.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+
 @Component
 public class JwtGenerador {
+
+
+    @Value("${app.jwtSecret}")
+    private String secretKey;
+
+    @Value("${app.jwtExpirationInMs}")
+    private long expirationTime;
 
     // Método para crear el token
     public String generarToken(Authentication autenticacion) {
         String email = autenticacion.getName();
         Date horaActual = new Date();
-        Date expiracionToken = new Date(horaActual.getTime() + ConstantesDeSeguridad.EXPIRACION_TOKEN_JWT);
+        Date expiracionToken = new Date(horaActual.getTime() + expirationTime);
 
         return Jwts.builder()
-                .subject(email)
-                .issuedAt(horaActual)
-                .expiration(expiracionToken)
+                .setSubject(email)
+                .setIssuedAt(horaActual)
+                .setExpiration(expiracionToken)
                 .signWith(generarKey())
                 .compact();
     }
@@ -29,25 +38,25 @@ public class JwtGenerador {
     // Método para extraer el email del token
     public String obtenerEmailUsuario(String token) {
         Claims claims = Jwts.parser()
-                .verifyWith(generarKey())
+                .setSigningKey(generarKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
 
     // Genera la clave secreta
     public SecretKey generarKey() {
-        return Keys.hmacShaKeyFor(ConstantesDeSeguridad.stringKeyParser().getBytes());
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     // Método para validar token
     public Boolean validarToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith(generarKey())
+                    .setSigningKey(generarKey())
                     .build()
-                    .parseSignedClaims(token);
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             throw new AuthenticationCredentialsNotFoundException("Token expirado o incorrecto.");
@@ -57,9 +66,28 @@ public class JwtGenerador {
     // Nuevo método para obtener todos los claims del token
     public Claims obtenerTodosLosClaims(String token) {
         return Jwts.parser()
-                .verifyWith(generarKey())
+                .setSigningKey(generarKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+
+    public String renovarToken(String token) {
+        Claims claims = obtenerTodosLosClaims(token);
+        Date now = new Date();
+        Date expirationDate = claims.getExpiration();
+        long tiempoRestante = expirationDate.getTime() - now.getTime();
+
+        if (tiempoRestante < (expirationTime / 2)) {
+            return Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(now)
+                    .setExpiration(new Date(now.getTime() + expirationTime))
+                    .signWith(generarKey())
+                    .compact();
+        }
+
+        return token;
     }
 }

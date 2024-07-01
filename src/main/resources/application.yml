@@ -21,4 +21,4 @@ logging:
 # Configuración JWT
 app:
     jwtSecret: tuClaveSecretaSuperSeguraAquí123!@#$%^&*()
-    jwtExpirationInMs: 3600000  # 1 hora en milisegundos
+    jwtExpirationInMs: 86400000  # 1 día en milisegundos

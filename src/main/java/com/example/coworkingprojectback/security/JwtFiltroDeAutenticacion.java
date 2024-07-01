@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @Data
 public class JwtFiltroDeAutenticacion extends OncePerRequestFilter {
 
@@ -38,6 +39,7 @@ public class JwtFiltroDeAutenticacion extends OncePerRequestFilter {
         try {
             String token = obtenerTokenDeSolicitud(solicitud);
             if (StringUtils.hasText(token) && jwtGenerador.validarToken(token)) {
+                token = jwtGenerador.renovarToken(token); // Renovar token si está cerca de expirar
                 String emailUsuario = jwtGenerador.obtenerEmailUsuario(token);
                 UserDetails detallesDeUsuario = detallesDeUsuarioServicio.loadUserByUsername(emailUsuario);
 
@@ -46,6 +48,7 @@ public class JwtFiltroDeAutenticacion extends OncePerRequestFilter {
                 autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(solicitud));
 
                 SecurityContextHolder.getContext().setAuthentication(autenticacion);
+                respuesta.setHeader("Authorization", "Bearer " + token); // Enviar nuevo token en la respuesta
             }
         } catch (Exception e) {
             logger.error("No se pudo establecer la autenticación del usuario en el contexto de seguridad", e);
