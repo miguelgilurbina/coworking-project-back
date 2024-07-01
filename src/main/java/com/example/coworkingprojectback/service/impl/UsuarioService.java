@@ -24,27 +24,32 @@ public class UsuarioService implements IUsuarioService {
     public UsuarioService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository) {
         this.passwordEncoder = passwordEncoder;
         this.usuarioRepository = usuarioRepository;
+
     }
     @Override
     public UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO usuarioDTO) {
+        // Primero, verificar si el email ya está registrado
+        if (usuarioRepository.findByEmail(usuarioDTO.getEmail()).isPresent()) {
+            throw new DataIntegrityViolationException("El correo electrónico ya está registrado.");
+        }
+
+        // Crear una nueva instancia de Usuario
         Usuario usuario = new Usuario();
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setApellido(usuarioDTO.getApellido());
-        usuario.setPassword(usuarioDTO.getPassword());
         usuario.setRol(usuarioDTO.getRol());
 
+        // Encriptar la contraseña
         String encodedPassword = passwordEncoder.encode(usuarioDTO.getPassword());
         usuario.setPassword(encodedPassword);
 
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            throw new DataIntegrityViolationException("El correo electrónico ya está registrado.");
-        }
-
+        // Guardar el usuario en la base de datos
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        // Convertir y retornar el DTO de respuesta
         return convertirADTO(usuarioGuardado);
     }
-
     @Override
     public UsuarioResponseDTO buscarPorId(Long id) {
         return null;
