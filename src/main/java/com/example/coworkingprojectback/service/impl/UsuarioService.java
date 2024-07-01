@@ -1,88 +1,99 @@
 package com.example.coworkingprojectback.service.impl;
 
-import com.example.coworkingprojectback.DTO.In.SalaDTO;
-import com.example.coworkingprojectback.DTO.In.UsuarioDTO;
-import com.example.coworkingprojectback.DTO.Out.SalaResponseDTO;
+import com.example.coworkingprojectback.DTO.In.UsuarioRequestDTO;
 import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
-import com.example.coworkingprojectback.DTO.Update.SalaRequestToUpdateDTO;
-import com.example.coworkingprojectback.DTO.Update.UsuarioRequestToUpdateDTO;
-import com.example.coworkingprojectback.entity.Sala;
+
 import com.example.coworkingprojectback.entity.Usuario;
-import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 import com.example.coworkingprojectback.repository.UsuarioRepository;
 import com.example.coworkingprojectback.service.IUsuarioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UsuarioService implements IUsuarioService {
 
+    private final PasswordEncoder passwordEncoder;
+    @Autowired
     private final UsuarioRepository usuarioRepository;
-    private final ObjectMapper objectMapper;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ObjectMapper objectMapper) {
+    @Autowired
+    public UsuarioService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.usuarioRepository = usuarioRepository;
-        this.objectMapper = objectMapper;
+
     }
-
-    private final String NOT_FOUND_MESSAGE = "No se encontró usuario";
-
-
-
     @Override
-    public UsuarioResponseDTO registrarUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = mapToEntity(usuarioDTO);
-        usuarioRepository.save(usuario);
+    public UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO usuarioDTO) {
+        // Primero, verificar si el email ya está registrado
+        if (usuarioRepository.findByEmail(usuarioDTO.getEmail()).isPresent()) {
+            throw new DataIntegrityViolationException("El correo electrónico ya está registrado.");
+        }
+
+        // Crear una nueva instancia de Usuario
+        Usuario usuario = new Usuario();
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setRol(usuarioDTO.getRol());
+
+        // Encriptar la contraseña
+        String encodedPassword = passwordEncoder.encode(usuarioDTO.getPassword());
+        usuario.setPassword(encodedPassword);
+
+        // Guardar el usuario en la base de datos
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        // Convertir y retornar el DTO de respuesta
+        return convertirADTO(usuarioGuardado);
+    }
+    @Override
+    public UsuarioResponseDTO buscarPorId(Long id) {
         return null;
     }
 
-    private Usuario mapToEntity(UsuarioDTO usuarioDTO) {
-        return objectMapper.convertValue(usuarioDTO, Usuario.class);
-    }
-
-    private Usuario mapToEntity(UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO) {
-        return objectMapper.convertValue(usuarioRequestToUpdateDTO, Usuario.class);
-    }
-
-    @Override
-    public UsuarioResponseDTO actualizarUsuario(UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO) {
-        buscarPorId(usuarioRequestToUpdateDTO.getId());
-        return mapToDTO(usuarioRepository.save(mapToEntity(usuarioRequestToUpdateDTO)));
-    }
-
-    private UsuarioResponseDTO mapToDTO(Usuario usuario) {
-        return objectMapper.convertValue(usuario, UsuarioResponseDTO.class);
-    }
-    private SalaResponseDTO mapToDTO(Sala sala) {
-        return objectMapper.convertValue(sala, SalaResponseDTO.class);
-    }
-
-
     @Override
     public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuarioRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        return null;
+    }
+
+
+
+    @Override
+    public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO usuarioDTO) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setPassword(usuarioDTO.getPassword()); // Considera encriptar la contraseña
+        usuario.setRol(usuarioDTO.getRol());
+
+        Usuario usuarioActualizado = usuarioRepository.save(usuario);
+        return convertirADTO(usuarioActualizado);
     }
 
     @Override
-    public UsuarioResponseDTO buscarPorNombre(String nombre) {
-        Usuario usuario = (Usuario) usuarioRepository.findByNombre(nombre).orElseThrow(()->new ResourceNotFoundException(NOT_FOUND_MESSAGE));
-        return mapToDTO(usuario);
-    }
-
-    @Override
-    public UsuarioResponseDTO buscarPorId(Long id) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(NOT_FOUND_MESSAGE));
-        return mapToDTO(usuario);
-    }
-
-    @Override
-    public void eliminarSala(Long id) throws ResourceNotFoundException {
-        buscarPorId(id);
+    public void eliminarUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
         usuarioRepository.deleteById(id);
-
     }
+
+    private UsuarioResponseDTO convertirADTO(Usuario usuario) {
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
+        dto.setId(usuario.getId());
+        dto.setEmail(usuario.getEmail());
+        dto.setNombre(usuario.getNombre());
+        dto.setApellido(usuario.getApellido());
+        dto.setRol(usuario.getRol());
+        return dto;
+    }
+
+
 }

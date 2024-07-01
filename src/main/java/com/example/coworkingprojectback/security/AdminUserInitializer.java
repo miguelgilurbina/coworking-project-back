@@ -25,7 +25,7 @@ public class AdminUserInitializer {
             admin.setNombre("Admin");
             admin.setApellido("Admin");
             admin.setEmail("admin@example.com");
-            admin.setContraseña(passwordEncoder.encode("admin")); // Encriptar la contraseña si es necesario
+            admin.setPassword(passwordEncoder.encode("admin")); // Encriptar la contraseña si es necesario
             admin.setRol("admin");
             userRepository.save(admin);
         }
