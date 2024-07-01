@@ -61,14 +61,15 @@ public class SeguridadConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/salas/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/salas/listar").permitAll()
                 .antMatchers(HttpMethod.POST, "/usuarios/registrar").permitAll()
-                .antMatchers(HttpMethod.GET, "/usuarios/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/usuarios/**").hasAuthority("ADMINISTRADOR")
-                .antMatchers(HttpMethod.PUT, "/usuarios/**").hasAuthority("ADMINISTRADOR")
+                .antMatchers(HttpMethod.GET, "/usuarios/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/usuarios/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.PUT, "/usuarios/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.POST, "/conectarse").permitAll()
                 .antMatchers(HttpMethod.POST, "/registrarAdmin").permitAll()
+                .antMatchers(HttpMethod.POST, "/caracteristicas/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/caracteristicas/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/categorias/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/categorias/nuevo").authenticated()
+                .antMatchers(HttpMethod.POST, "/categorias/registrar").authenticated()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFiltroDeAutenticacion(), UsernamePasswordAuthenticationFilter.class);

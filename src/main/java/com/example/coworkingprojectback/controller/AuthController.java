@@ -5,29 +5,29 @@ import com.example.coworkingprojectback.payload.LoginRequest;
 import com.example.coworkingprojectback.payload.VerificationResponse;
 import com.example.coworkingprojectback.security.JwtGenerador;
 import com.example.coworkingprojectback.service.impl.UsuarioService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
+import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth/")
+@CrossOrigin("*")
+@AllArgsConstructor
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtGenerador jwtGenerador;
+    private UsuarioService usuarioService;
 
 
     @PostMapping("/login")
@@ -43,6 +43,8 @@ public class AuthController {
 
         String jwt = jwtGenerador.generarToken(authentication);
 
+        Collection<String> roles = jwtGenerador.obtenerRolesUsuario(jwt);
+
         Cookie cookie = new Cookie("jwt", jwt);
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // si estás usando HTTPS
@@ -51,7 +53,7 @@ public class AuthController {
 
         response.addCookie(cookie);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, roles));
     }
 
 

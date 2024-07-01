@@ -6,9 +6,13 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -24,11 +28,13 @@ public class JwtGenerador {
     // Método para crear el token
     public String generarToken(Authentication autenticacion) {
         String email = autenticacion.getName();
+        String rol = autenticacion.getAuthorities().iterator().next().getAuthority();
         Date horaActual = new Date();
         Date expiracionToken = new Date(horaActual.getTime() + expirationTime);
 
         return Jwts.builder()
                 .setSubject(email)
+                .claim("rol", rol)
                 .setIssuedAt(horaActual)
                 .setExpiration(expiracionToken)
                 .signWith(generarKey())
@@ -89,5 +95,10 @@ public class JwtGenerador {
         }
 
         return token;
+    }
+
+    public Collection<String> obtenerRolesUsuario(String token) {
+        Claims claims = obtenerTodosLosClaims(token);
+        return Collections.singleton(claims.get("rol", String.class));
     }
 }
