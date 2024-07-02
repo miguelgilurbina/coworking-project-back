@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IUsuarioService {
     UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO usuarioDTO);
+
+    UsuarioResponseDTO buscarPorEmail(String email);
     UsuarioResponseDTO buscarPorId(Long id);
     List<UsuarioResponseDTO> listarUsuarios();
     UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO usuarioDTO);

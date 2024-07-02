@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +49,13 @@ public class UsuarioService implements IUsuarioService {
 
         // Convertir y retornar el DTO de respuesta
         return convertirADTO(usuarioGuardado);
+    }
+
+    @Override
+    public UsuarioResponseDTO buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .map(this::convertirADTO)
+                .orElseThrow(() -> new NoSuchElementException("No user found with email: " + email));
     }
 
     @Override
@@ -107,4 +115,8 @@ public class UsuarioService implements IUsuarioService {
         dto.setRol(usuario.getRol());
         return dto;
     }
+
+
+
+
 }

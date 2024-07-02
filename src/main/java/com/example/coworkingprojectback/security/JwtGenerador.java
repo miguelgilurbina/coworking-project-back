@@ -35,7 +35,6 @@ public class JwtGenerador {
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("rol", rol)
                 .setIssuedAt(horaActual)
                 .setExpiration(expiracionToken)
                 .signWith(generarKey())
@@ -98,13 +97,6 @@ public class JwtGenerador {
         return token;
     }
 
-    public Collection<String> obtenerRolesUsuario(String token) {
-        Claims claims = obtenerTodosLosClaims(token);
-        return Collections.singleton(claims.get("rol", String.class));
-    }
 
-    public List<String> obtenerRolesDesdeToken(String token) {
-        Claims claims = obtenerTodosLosClaims(token);
-        return claims.get("roles", List.class);
-    }
+
 }

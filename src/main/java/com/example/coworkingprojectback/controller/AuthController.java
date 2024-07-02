@@ -1,9 +1,13 @@
 package com.example.coworkingprojectback.controller;
 
+import com.example.coworkingprojectback.DTO.Out.AuthResponseDTO;
+import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
+import com.example.coworkingprojectback.entity.Usuario;
 import com.example.coworkingprojectback.payload.JwtAuthenticationResponse;
 import com.example.coworkingprojectback.payload.LoginRequest;
 import com.example.coworkingprojectback.payload.VerificationResponse;
 import com.example.coworkingprojectback.security.JwtGenerador;
+import com.example.coworkingprojectback.service.impl.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,8 +20,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.util.List;
 
+
+import lombok.AllArgsConstructor;
+
+
 @RestController
 @RequestMapping("/api/auth")
+@AllArgsConstructor
 public class AuthController {
 
     @Autowired
@@ -25,6 +34,9 @@ public class AuthController {
 
     @Autowired
     private JwtGenerador jwtGenerador;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -38,7 +50,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtGenerador.generarToken(authentication);
-        List<String> roles = jwtGenerador.obtenerRolesDesdeToken(jwt);
 
         Cookie cookie = new Cookie("jwt", jwt);
         cookie.setHttpOnly(true);
@@ -48,7 +59,10 @@ public class AuthController {
 
         response.addCookie(cookie);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, roles));
+        // Obtener los datos del usuario y convertirlos a DTO
+        UsuarioResponseDTO usuarioResponse = usuarioService.buscarPorEmail(loginRequest.getUsername());
+
+        return ResponseEntity.ok(new AuthResponseDTO(jwt, usuarioResponse));
     }
 
     @PostMapping("/logout")
@@ -70,10 +84,10 @@ public class AuthController {
             token = token.substring(7);
             if (jwtGenerador.validarToken(token)) {
                 String emailUsuario = jwtGenerador.obtenerEmailUsuario(token);
-                List<String> roles = jwtGenerador.obtenerRolesDesdeToken(token);
-                return ResponseEntity.ok(new VerificationResponse(emailUsuario, roles, true));
+                return ResponseEntity.ok(new VerificationResponse(emailUsuario, true));
             }
         }
-        return ResponseEntity.badRequest().body(new VerificationResponse(null, null, false));
+        return ResponseEntity.badRequest().body(new VerificationResponse(null, false));
     }
 }
+
