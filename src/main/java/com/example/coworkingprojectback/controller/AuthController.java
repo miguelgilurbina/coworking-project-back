@@ -4,8 +4,6 @@ import com.example.coworkingprojectback.payload.JwtAuthenticationResponse;
 import com.example.coworkingprojectback.payload.LoginRequest;
 import com.example.coworkingprojectback.payload.VerificationResponse;
 import com.example.coworkingprojectback.security.JwtGenerador;
-import com.example.coworkingprojectback.service.impl.UsuarioService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,22 +11,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/")
-@CrossOrigin("*")
-@AllArgsConstructor
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private JwtGenerador jwtGenerador;
-    private UsuarioService usuarioService;
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -42,8 +38,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtGenerador.generarToken(authentication);
-
-        Collection<String> roles = jwtGenerador.obtenerRolesUsuario(jwt);
+        List<String> roles = jwtGenerador.obtenerRolesDesdeToken(jwt);
 
         Cookie cookie = new Cookie("jwt", jwt);
         cookie.setHttpOnly(true);
@@ -55,8 +50,6 @@ public class AuthController {
 
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, roles));
     }
-
-
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
@@ -77,9 +70,10 @@ public class AuthController {
             token = token.substring(7);
             if (jwtGenerador.validarToken(token)) {
                 String emailUsuario = jwtGenerador.obtenerEmailUsuario(token);
-                return ResponseEntity.ok(new VerificationResponse(emailUsuario, true));
+                List<String> roles = jwtGenerador.obtenerRolesDesdeToken(token);
+                return ResponseEntity.ok(new VerificationResponse(emailUsuario, roles, true));
             }
         }
-        return ResponseEntity.badRequest().body(new VerificationResponse(null, false));
+        return ResponseEntity.badRequest().body(new VerificationResponse(null, null, false));
     }
 }

@@ -12,6 +12,7 @@ import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -100,5 +101,10 @@ public class JwtGenerador {
     public Collection<String> obtenerRolesUsuario(String token) {
         Claims claims = obtenerTodosLosClaims(token);
         return Collections.singleton(claims.get("rol", String.class));
+    }
+
+    public List<String> obtenerRolesDesdeToken(String token) {
+        Claims claims = obtenerTodosLosClaims(token);
+        return claims.get("roles", List.class);
     }
 }
