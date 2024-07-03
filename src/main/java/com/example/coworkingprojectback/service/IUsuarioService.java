@@ -1,18 +1,15 @@
 package com.example.coworkingprojectback.service;
-
-import com.example.coworkingprojectback.DTO.In.UsuarioDTO;
-import com.example.coworkingprojectback.DTO.Out.SalaResponseDTO;
+import com.example.coworkingprojectback.DTO.In.UsuarioRequestDTO;
 import com.example.coworkingprojectback.DTO.Out.UsuarioResponseDTO;
-import com.example.coworkingprojectback.DTO.Update.UsuarioRequestToUpdateDTO;
-import com.example.coworkingprojectback.exception.ResourceNotFoundException;
 
 import java.util.List;
 
 public interface IUsuarioService {
-    UsuarioResponseDTO registrarUsuario(UsuarioDTO usuarioDTO);
-    UsuarioResponseDTO actualizarUsuario(UsuarioRequestToUpdateDTO usuarioRequestToUpdateDTO);
-    List<UsuarioResponseDTO> listarUsuarios();
-    UsuarioResponseDTO buscarPorNombre(String nombre);
+    UsuarioResponseDTO registrarUsuario(UsuarioRequestDTO usuarioDTO);
+
+    UsuarioResponseDTO buscarPorEmail(String email);
     UsuarioResponseDTO buscarPorId(Long id);
-    void eliminarSala(Long id) throws ResourceNotFoundException;
+    List<UsuarioResponseDTO> listarUsuarios();
+    UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO usuarioDTO);
+    void eliminarUsuario(Long id);
 }

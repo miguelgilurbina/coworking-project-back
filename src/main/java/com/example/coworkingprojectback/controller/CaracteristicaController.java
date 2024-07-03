@@ -37,11 +37,11 @@ public class CaracteristicaController {
         return ResponseEntity.ok(caracteristicaService.getAllCaracteristicas());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
     public ResponseEntity<CaracteristicaResponseDTO> updateCaracteristica(@RequestBody CaracteristicaRequestToUpdate caracteristicaDTO) {
         return ResponseEntity.ok(caracteristicaService.updateCaracteristica(caracteristicaDTO)); }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> deleteCaracteristica(@PathVariable Long id) {
         caracteristicaService.deleteCaracteristica(id);
         return ResponseEntity.noContent().build();

@@ -1,32 +1,21 @@
 package com.example.coworkingprojectback.DTO.Out;
 
-import lombok.*;
+import com.example.coworkingprojectback.entity.Usuario;
+import lombok.Data;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class UsuarioResponseDTO {
     private Long id;
     private String email;
     private String nombre;
     private String apellido;
-    private String contrasena;
-    private boolean esAdmin;
+    private String rol;
 
-    public String getEmail() {
-        return email;
-    }
 
-    public String getNombre() {
-        return nombre;
-    }
 
-    public String getApellido() {
-        return apellido;
-    }
+
 }
+
 
 
 

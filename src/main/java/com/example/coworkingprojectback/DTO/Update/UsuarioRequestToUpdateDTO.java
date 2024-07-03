@@ -14,7 +14,7 @@ public class UsuarioRequestToUpdateDTO {
     private String email;
     private String nombre;
     private String apellido;
-    private String contrasena;
+    private String password;
     private boolean esAdmin;
 
     public Long getId() {

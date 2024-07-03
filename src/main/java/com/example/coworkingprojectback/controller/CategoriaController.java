@@ -35,7 +35,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.getAllCategorias());
     }
 
-    @PutMapping("actualizar")
+    @PutMapping("/actualizar/{id}")
     public ResponseEntity<CategoriaResponseDTO> updateCategoria(@RequestBody CategoriaRequestToUpdateDTO categoriaDTO) throws ResourceNotFoundException {
         return ResponseEntity.ok(categoriaService.updateCategoria(categoriaDTO));
     }

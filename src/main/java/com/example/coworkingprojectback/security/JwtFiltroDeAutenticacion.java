@@ -3,7 +3,6 @@ package com.example.coworkingprojectback.security;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,10 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+
 
 @Data
 public class JwtFiltroDeAutenticacion extends OncePerRequestFilter {
+
     @Autowired
     private DetallesDeUsuarioServicio detallesDeUsuarioServicio;
 
@@ -28,31 +28,32 @@ public class JwtFiltroDeAutenticacion extends OncePerRequestFilter {
     private String obtenerTokenDeSolicitud(HttpServletRequest solicitud) {
         String bearerToken = solicitud.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest solicitud,
-                                    HttpServletResponse respuesta,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest solicitud, HttpServletResponse respuesta, FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            String token = obtenerTokenDeSolicitud(solicitud);
+            if (StringUtils.hasText(token) && jwtGenerador.validarToken(token)) {
+                token = jwtGenerador.renovarToken(token); // Renovar token si está cerca de expirar
+                String emailUsuario = jwtGenerador.obtenerEmailUsuario(token);
+                UserDetails detallesDeUsuario = detallesDeUsuarioServicio.loadUserByUsername(emailUsuario);
 
-        String token = obtenerTokenDeSolicitud(solicitud);
+                UsernamePasswordAuthenticationToken autenticacion = new UsernamePasswordAuthenticationToken(
+                        detallesDeUsuario, null, detallesDeUsuario.getAuthorities());
+                autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(solicitud));
 
-        if(StringUtils.hasText(token) && jwtGenerador.validarToken(token)) {
-            String emailUsuario = jwtGenerador.obtenerEmailUsuario(token);
-            UserDetails detallesDeUsuario = detallesDeUsuarioServicio.loadUserByUsername(emailUsuario);
-            List<String> rolDeUsuario = detallesDeUsuario.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-
-            if(rolDeUsuario.contains("USUARIO") || rolDeUsuario.contains("ADMINISTRADOR")) {
-                UsernamePasswordAuthenticationToken tokenDeAutenticacion = new UsernamePasswordAuthenticationToken(detallesDeUsuario,
-                        null, detallesDeUsuario.getAuthorities());
-
-                tokenDeAutenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(solicitud));
-                SecurityContextHolder.getContext().setAuthentication(tokenDeAutenticacion);
+                SecurityContextHolder.getContext().setAuthentication(autenticacion);
+                respuesta.setHeader("Authorization", "Bearer " + token); // Enviar nuevo token en la respuesta
             }
+        } catch (Exception e) {
+            logger.error("No se pudo establecer la autenticación del usuario en el contexto de seguridad", e);
         }
+
         filterChain.doFilter(solicitud, respuesta);
     }
-
 }
